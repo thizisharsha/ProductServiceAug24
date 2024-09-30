@@ -5,17 +5,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-@Entity(name = "products")
+
 @Data
-public class Product {
+@Entity
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    String name;
-    String category;
-    String description;
-
-
+    private int id;
+    private String name;
 }

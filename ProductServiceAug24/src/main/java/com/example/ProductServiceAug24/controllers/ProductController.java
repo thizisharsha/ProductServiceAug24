@@ -6,9 +6,12 @@ import com.example.ProductServiceAug24.exceptions.productNotFoundException;
 import com.example.ProductServiceAug24.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -28,5 +31,14 @@ public class ProductController {
     public Product createProduct(@RequestBody CreateProductRequestDto requestDto){
        System.out.println(requestDto);
         return ps.createProduct(requestDto.getName(), requestDto.getCategory(), requestDto.getDescription());
+    }
+    @GetMapping()
+    public ResponseEntity<Page<Product>> getAllProducts(
+            @RequestParam("pageSize") int pageSize,
+            @RequestParam("pageNum") int pageNum
+    ){
+
+        Page<Product> products= ps.getAllProducts(pageSize,pageNum);
+        return ResponseEntity.ok(products);
     }
 }

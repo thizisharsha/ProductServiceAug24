@@ -2,9 +2,16 @@ package com.example.ProductServiceAug24.services;
 
 import com.example.ProductServiceAug24.exceptions.productNotFoundException;
 import com.example.ProductServiceAug24.models.Product;
+import com.example.ProductServiceAug24.projections.ProductInfo;
 import com.example.ProductServiceAug24.repositories.productRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service("dbimpl")
 public class ProductServiceImpl implements ProductService{
@@ -13,12 +20,23 @@ public class ProductServiceImpl implements ProductService{
     productRepository pr;
     @Override
     public Product getProductById(long id) throws productNotFoundException {
-      return  null;
+        ProductInfo productinfo=pr.getProductInfo(id);
+        System.out.println(productinfo.getDescription());
+        System.out.println(productinfo.getName());
+        System.out.println(productinfo.getId());
+        Optional<Product> op= pr.findById(id);
+        if(op.isPresent()){
+            Product product=op.get();
+            return product;
+        }
+        else {
+            throw  new productNotFoundException("Product with id:"+id+" is not available");
+        }
     }
 
     @Override
     public Product createProduct(String name, String category, String description) {
-        Product p=pr.findBynameandCategory(name,category);
+        Product p=pr.findByNameAndCategory(name,category);
         if(p!=null){
             return p;
         }
@@ -30,4 +48,11 @@ public class ProductServiceImpl implements ProductService{
         System.out.println(product);
         return product;
     }
+
+    @Override
+    public Page<Product> getAllProducts(int pageSize, int pageNum) {
+        return pr.findAll(PageRequest.of(pageNum, pageSize,Sort.by("category").descending()));
+    }
+
+
 }
