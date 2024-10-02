@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
-    @Qualifier("dbimpl")
+    @Qualifier("fakeStore")
     private ProductService ps;
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long productId) throws productNotFoundException {
